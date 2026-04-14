@@ -32,10 +32,10 @@ export const siteConfig: SiteConfig = {
 	favicon: [
 		// 留空则使用默认图标
 		{
-		src: '/favicon/saber.png',    // 图标路径，相对于 /public 目录
-		//   theme: 'light',              // (可选) 'light' 或 'dark'，仅当你为亮色和深色模式准备了不同图标时设置
-		//   sizes: '32x32',              // (可选) 图标尺寸，仅当你准备了不同尺寸的图标时设置
-		}
+			src: "/favicon/saber.png", // 图标路径，相对于 /public 目录
+			//   theme: 'light',              // (可选) 'light' 或 'dark'，仅当你为亮色和深色模式准备了不同图标时设置
+			//   sizes: '32x32',              // (可选) 图标尺寸，仅当你准备了不同尺寸的图标时设置
+		},
 	],
 };
 
@@ -44,9 +44,9 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Home,
 		LinkPreset.Archive,
 		LinkPreset.About,
-		{ 
-			name: '友链',     // 导航栏显示的文字
-			url: '/links/',      // 对应你在 src/pages/ 目录下创建的文件名 (links.md)
+		{
+			name: "友链", // 导航栏显示的文字
+			url: "/links/", // 对应你在 src/pages/ 目录下创建的文件名 (links.md)
 			external: false,
 		},
 		{
@@ -92,4 +92,4 @@ export const expressiveCodeConfig: ExpressiveCodeConfig = {
 	// 注意：部分样式（如背景颜色）正在被覆盖，请参阅 astro.config.mjs 文件。
 	// 请选择深色主题，因为本博客主题目前仅支持深色背景代码框
 	theme: "github-dark",
-}
+};
