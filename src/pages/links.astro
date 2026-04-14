@@ -1,0 +1,79 @@
+---
+import MainGridLayout from "../layouts/MainGridLayout.astro";
+
+const links = [
+  {
+    name: "Alan",
+    desc: "心中地球最强",
+    url: "https://alan-sheep.github.io/",
+    avatar: "https://alan-sheep.github.io/img/title_1.jpeg"
+  },
+];
+---
+
+<MainGridLayout title="友链" description="我的朋友们">
+    <div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative min-h-32">
+        <div class="card-base z-10 px-9 py-6 relative w-full">
+            <div class="flex items-center gap-3 mb-8 text-[var(--primary)] animate-fade-up">
+                <!-- <div class="i-fa6-solid:users w-7 h-7 shrink-0"></div> -->
+                <h2 class="text-2xl font-bold m-0">友链</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 animate-fade-up" style="animation-delay: 100ms">
+                {links.map((link) => (
+                    /* 注意：这里删除了 border-l-4，增加了 relative 和 custom-link-card */
+                    <a href={link.url} target="_blank" 
+                       class="not-prose group flex items-center justify-between p-4 
+                              rounded-lg relative overflow-hidden
+                              transition-all duration-300 no-underline! min-h-[90px] 
+                              shadow-sm hover:shadow-md custom-link-card">
+                        <div class="flex flex-col justify-center pl-4 overflow-hidden">
+                            <div class="font-bold text-black/80 dark:text-white/90 text-lg group-hover:text-[var(--primary)] transition-colors truncate">{link.name}</div>
+                            <div class="text-black/50 dark:text-white/50 text-sm italic line-clamp-1 group-hover:text-black/70 dark:group-hover:text-white/70">{link.desc}</div>
+                        </div>
+                        <div class="flex-shrink-0 pr-2 ml-4 flex items-center justify-center">
+                            <img src={link.avatar} width="48" height="48" alt={link.name} class="w-12 h-12 rounded-lg object-cover transition-all shadow-sm group-hover:scale-110" loading="lazy" />
+                        </div>
+                    </a>
+                ))}
+            </div>
+        </div>
+    </div>
+</MainGridLayout>
+
+<style is:global>
+  html { overflow-y: scroll; }
+
+  .custom-link-card {
+    background-color: color-mix(in srgb, var(--primary), white 90%);
+  }
+  .custom-link-card:hover {
+    background-color: color-mix(in srgb, var(--primary), white 80%) !important;
+  }
+
+  /* 制作左侧短色条 */
+  .custom-link-card::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 17.5%;    /* 控制距离顶部的位置，值越大色条越短 */
+    height: 65%; /* 控制色条的高度：50% 表示高度为卡片的一半 */
+    width: 4px;  /* 色条宽度 */
+    background-color: var(--primary);
+    border-radius: 99px; 
+    transition: all 0.3s;
+  }
+
+  /* 悬停时色条可以稍微变长一点点作为反馈（可选） */
+  .custom-link-card:hover::before {
+    height: 70%;
+    top: 15%;
+  }
+
+  .dark .custom-link-card {
+    background-color: color-mix(in srgb, var(--primary), #1a1a1a 85%);
+  }
+  .dark .custom-link-card:hover {
+    background-color: color-mix(in srgb, var(--primary), #1a1a1a 75%) !important;
+  }
+</style>

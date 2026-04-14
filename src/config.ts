@@ -44,6 +44,11 @@ export const navBarConfig: NavBarConfig = {
 		LinkPreset.Home,
 		LinkPreset.Archive,
 		LinkPreset.About,
+		{ 
+			name: '友链',     // 导航栏显示的文字
+			url: '/links/',      // 对应你在 src/pages/ 目录下创建的文件名 (links.md)
+			external: false,
+		},
 		{
 			name: "GitHub",
 			url: "https://github.com/saicaca/fuwari", // 内部链接不应包含基础路径（base path），系统会自动添加
@@ -55,7 +60,7 @@ export const navBarConfig: NavBarConfig = {
 export const profileConfig: ProfileConfig = {
 	avatar: "/images/saber.jpg", // 相对于 /src 目录。如果以 '/' 开头，则相对于 /public 目录
 	name: "Molly ovo",
-	bio: "须知少日拏云志，曾许人间第一流。",
+	bio: "他年我若修花史 列作人间第一香",
 	links: [
 		{
 			name: "Bilibili",
