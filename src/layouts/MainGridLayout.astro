@@ -14,6 +14,7 @@ import {
 	MAIN_PANEL_OVERLAPS_BANNER_HEIGHT,
 } from "../constants/constants";
 import Layout from "./Layout.astro";
+import banners from "../generated-banners.json";
 
 interface Props {
 	title?: string;
@@ -123,3 +124,157 @@ const mainPanelTop = siteConfig.banner.enable
     </div>
 </div>
 </Layout>
+
+<!-- <script is:inline define:vars={{ banners }}>
+  // 1. 配置信息（这里手动填入你 config.ts 里的固定图路径）
+  const FIXED_BANNER_SRC = "/images/nvpu.jpg"; 
+  
+  window.BANNER_LIST = banners;
+  window.lastBannerUrl = ""; 
+  window.isBannerProcessing = false; 
+
+  function setRandomBanner() {
+    const bannerContainer = document.getElementById('banner');
+    if (!bannerContainer) return;
+
+    const img = bannerContainer.querySelector('img');
+    if (!img) return;
+
+    // 【核心逻辑修正点】：判断当前是否为首页
+    const isHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+
+    if (isHomePage) {
+      // 如果是首页，且当前图片不是固定图，则强制还原
+      if (!img.src.includes(FIXED_BANNER_SRC)) {
+        console.log("[Banner] 回到首页，强制还原固定图");
+        img.src = FIXED_BANNER_SRC;
+        img.style.opacity = "1";
+      }
+      return; // 首页不执行后面的随机逻辑
+    }
+
+    // --- 以下是内页的随机逻辑 ---
+    if (window.isBannerProcessing) return;
+    window.isBannerProcessing = true;
+
+    // 随机选一张，且确保不和上一张重复
+    let randomImg = window.BANNER_LIST[Math.floor(Math.random() * window.BANNER_LIST.length)];
+    if (window.BANNER_LIST.length > 1 && randomImg === window.lastBannerUrl) {
+        randomImg = window.BANNER_LIST.find(url => url !== window.lastBannerUrl);
+    }
+    window.lastBannerUrl = randomImg;
+
+    // 执行替换
+    const tempImg = new Image();
+    tempImg.src = randomImg;
+    tempImg.onload = () => {
+      img.src = randomImg;
+      img.style.opacity = "1";
+      setTimeout(() => {
+        window.isBannerProcessing = false;
+      }, 600);
+    };
+    tempImg.onerror = () => { window.isBannerProcessing = false; };
+  }
+
+  // --- 监听逻辑 ---
+
+  if (document.readyState === 'complete') {
+    setRandomBanner();
+  } else {
+    window.addEventListener('load', setRandomBanner);
+  }
+
+  // 确保每次跳转（无论是进内页还是回首页）都触发检查
+  document.addEventListener('swup:content_replaced', () => {
+    setTimeout(setRandomBanner, 50);
+  });
+</script>
+
+<style is:global>
+  #banner img {
+    object-fit: cover !important;
+    object-position: center !important; 
+    transition: opacity 0.6s ease-in-out, height 0.5s ease-in-out !important;
+  }
+</style> -->
+
+<script is:inline define:vars={{ banners }}>
+  const FIXED_BANNER_SRC = "/images/nvpu.jpg";
+  window.BANNER_LIST = banners;
+  window.lastBannerUrl = "";
+  window.isBannerProcessing = false;
+
+  function getNextRandomUrl() {
+    if (!window.BANNER_LIST || window.BANNER_LIST.length === 0) return null;
+    let next = window.BANNER_LIST[Math.floor(Math.random() * window.BANNER_LIST.length)];
+    if (window.BANNER_LIST.length > 1 && next === window.lastBannerUrl) {
+      next = window.BANNER_LIST.find(url => url !== window.lastBannerUrl);
+    }
+    return next;
+  }
+
+  function setRandomBanner() {
+    if (window.isBannerProcessing) return;
+
+    const bannerContainer = document.getElementById('banner');
+    if (!bannerContainer) return;
+    const img = bannerContainer.querySelector('img');
+    if (!img) return;
+
+    const isHomePage = window.location.pathname === '/' || window.location.pathname === '/index.html';
+
+    if (isHomePage) {
+      if (!img.src.includes(FIXED_BANNER_SRC)) {
+        img.src = FIXED_BANNER_SRC;
+        img.style.opacity = "1";
+      }
+      return;
+    }
+
+    const randomImg = getNextRandomUrl();
+    if (!randomImg) return;
+
+    window.isBannerProcessing = true;
+    window.lastBannerUrl = randomImg;
+
+    const tempImg = new Image();
+    tempImg.src = randomImg;
+    tempImg.onload = () => {
+      img.src = randomImg;
+      img.style.opacity = "1";
+      setTimeout(() => {
+        window.isBannerProcessing = false;
+      }, 600);
+    };
+    tempImg.onerror = () => { window.isBannerProcessing = false; };
+  }
+
+  if (document.readyState === 'complete') {
+    setRandomBanner();
+  } else {
+    window.addEventListener('load', setRandomBanner);
+  }
+
+  document.addEventListener('swup:clickLink', () => {
+    const next = getNextRandomUrl();
+    if (next) {
+      const preloader = new Image();
+      preloader.src = next;
+    }
+  });
+
+  document.addEventListener('swup:content_replaced', () => {
+    setTimeout(setRandomBanner, 50);
+  });
+</script>
+
+<style is:global>
+  #banner img {
+    object-fit: cover !important;
+    object-position: center !important;
+    transition: opacity 0.5s ease-out, height 0.5s ease-out !important;
+    will-change: opacity;
+    transform: translateZ(0);
+  }
+</style>
